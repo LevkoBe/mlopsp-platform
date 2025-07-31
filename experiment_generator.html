@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>CSV Generator</h3>
+    <label for="expCount">Number of Experiments:</label><br />
+    <input id="expCount" type="number" value="3" min="1" /><br />
+
+    <label for="stepCount">Steps per Experiment:</label><br />
+    <input id="stepCount" type="number" value="10" min="1" /><br />
+
+    <label for="metricCount">Number of Metrics:</label><br />
+    <input id="metricCount" type="number" value="3" min="1" /><br />
+
+    <button onclick="generate()">Generate CSV</button>
+
+    <script>
+      const pad = (n) => n.toString().padStart(2, "0");
+      const generate = () => {
+        const experiments = +expCount.value,
+          steps = +stepCount.value,
+          metrics = +metricCount.value;
+        let csv = "experiment_id,metric_name,step,value\n";
+        for (let e = 1; e <= experiments; e++)
+          for (let m = 1; m <= metrics; m++) {
+            let value = Math.random();
+            for (let s = 1; s <= steps; s++) {
+              value += Math.random() > 0.5 ? 0.05 : -0.05;
+              value = Math.max(0, Math.min(1, value));
+              csv += `exp_${pad(e)},metric_${pad(m)},${s},${value.toFixed(
+                4
+              )}\n`;
+            }
+          }
+        const blob = new Blob([csv], { type: "text/csv" }),
+          url = URL.createObjectURL(blob),
+          link = Object.assign(document.createElement("a"), {
+            href: url,
+            download: "experiment_logs.csv",
+          });
+        link.click();
+        URL.revokeObjectURL(url);
+      };
+    </script>
+  </body>
+</html>
