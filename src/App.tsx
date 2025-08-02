@@ -47,12 +47,15 @@ const App: React.FC = () => {
             <div className="upload-area">
               <h2>Upload Your Data</h2>
               <p>Select a CSV file with your experiment data</p>
-              <input
-                type="file"
-                accept=".csv"
-                onChange={handleFileUpload}
-                className="file-input"
-              />
+              <label className="file-input-label">
+                <span className="file-button">Upload CSV</span>
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileUpload}
+                  className="file-input"
+                />
+              </label>
               <div className="format-info">
                 <h4>Expected format:</h4>
                 <code>experiment_id, metric_name, step, value</code>
@@ -102,7 +105,7 @@ const App: React.FC = () => {
                   ))}
                 </tbody>
               </table>
-              {data.length > 10 && (
+              {data.length < 10 && (
                 <p className="table-note">
                   Showing first 10 rows of {data.length} total
                 </p>
