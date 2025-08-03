@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Papa from "papaparse";
 import "./App.css";
 import { ExperimentData } from "./types";
 
@@ -10,22 +11,23 @@ const App: React.FC = () => {
     const file = event.target.files?.[0];
     if (file) {
       setFileName(file.name);
-      const dummyData: ExperimentData[] = [
-        {
-          experiment_id: "exp_001",
-          metric_name: "accuracy",
-          step: 1,
-          value: 0.65,
+
+      Papa.parse<ExperimentData>(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          const parsedData = result.data.map((row) => ({
+            experiment_id: row.experiment_id,
+            metric_name: row.metric_name,
+            step: Number(row.step),
+            value: Number(row.value),
+          }));
+          setData(parsedData);
         },
-        { experiment_id: "exp_001", metric_name: "loss", step: 1, value: 0.89 },
-        {
-          experiment_id: "exp_002",
-          metric_name: "accuracy",
-          step: 1,
-          value: 0.58,
+        error: (error) => {
+          console.error("CSV parsing error:", error);
         },
-      ];
-      setData(dummyData);
+      });
     }
   };
 
