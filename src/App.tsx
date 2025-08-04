@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Papa from "papaparse";
 import "./App.css";
 import { ExperimentData } from "./types";
@@ -6,6 +6,14 @@ import { ExperimentData } from "./types";
 const App: React.FC = () => {
   const [data, setData] = useState<ExperimentData[]>([]);
   const [fileName, setFileName] = useState<string>("");
+  const [selectedExperiments, setSelectedExperiments] = useState<Set<string>>(
+    new Set()
+  );
+
+  const experiments = useMemo(() => {
+    const experimentIds = Array.from(new Set(data.map((d) => d.experiment_id)));
+    return experimentIds.sort();
+  }, [data]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -23,6 +31,13 @@ const App: React.FC = () => {
             value: Number(row.value),
           }));
           setData(parsedData);
+
+          const firstExperiment = Array.from(
+            new Set(parsedData.map((d) => d.experiment_id))
+          )[0];
+          if (firstExperiment) {
+            setSelectedExperiments(new Set([firstExperiment]));
+          }
         },
         error: (error) => {
           console.error("CSV parsing error:", error);
@@ -34,7 +49,32 @@ const App: React.FC = () => {
   const resetData = () => {
     setData([]);
     setFileName("");
+    setSelectedExperiments(new Set());
   };
+
+  const toggleExperiment = (experimentId: string) => {
+    setSelectedExperiments((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(experimentId)) {
+        newSet.delete(experimentId);
+      } else {
+        newSet.add(experimentId);
+      }
+      return newSet;
+    });
+  };
+
+  const selectAllExperiments = () => {
+    setSelectedExperiments(new Set(experiments));
+  };
+
+  const clearAllExperiments = () => {
+    setSelectedExperiments(new Set());
+  };
+
+  const filteredData = useMemo(() => {
+    return data.filter((row) => selectedExperiments.has(row.experiment_id));
+  }, [data, selectedExperiments]);
 
   return (
     <div className="app">
@@ -73,45 +113,114 @@ const App: React.FC = () => {
               </button>
             </div>
 
-            <div className="data-summary">
-              <p>Total data points: {data.length}</p>
-              <p>
-                Experiments:{" "}
-                {Array.from(new Set(data.map((d) => d.experiment_id))).length}
-              </p>
-              <p>
-                Metrics:{" "}
-                {Array.from(new Set(data.map((d) => d.metric_name))).length}
-              </p>
-            </div>
+            <div className="content-grid">
+              <div className="experiment-panel">
+                <div className="panel-header">
+                  <h3>Experiments ({selectedExperiments.size} selected)</h3>
+                  <div className="panel-controls">
+                    <button
+                      onClick={selectAllExperiments}
+                      className="control-btn select-all"
+                    >
+                      All
+                    </button>
+                    <button
+                      onClick={clearAllExperiments}
+                      className="control-btn clear-all"
+                    >
+                      None
+                    </button>
+                  </div>
+                </div>
 
-            <div className="data-table">
-              <h3>Sample Data</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Experiment ID</th>
-                    <th>Metric</th>
-                    <th>Step</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.slice(0, 10).map((row, index) => (
-                    <tr key={index}>
-                      <td>{row.experiment_id}</td>
-                      <td>{row.metric_name}</td>
-                      <td>{row.step}</td>
-                      <td>{row.value.toFixed(4)}</td>
-                    </tr>
+                <div className="experiment-list">
+                  {experiments.map((experimentId) => (
+                    <div
+                      key={experimentId}
+                      className={`experiment-item ${
+                        selectedExperiments.has(experimentId) ? "selected" : ""
+                      }`}
+                      onClick={() => toggleExperiment(experimentId)}
+                    >
+                      <span className="experiment-name">{experimentId}</span>
+                      <span className="experiment-indicator">
+                        {selectedExperiments.has(experimentId) ? "✓" : "○"}
+                      </span>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-              {data.length < 10 && (
-                <p className="table-note">
-                  Showing first 10 rows of {data.length} total
-                </p>
-              )}
+                </div>
+              </div>
+
+              <div className="main-content">
+                <div className="data-summary">
+                  <div className="summary-item">
+                    <span className="summary-label">Total experiments:</span>
+                    <span className="summary-value">{experiments.length}</span>
+                  </div>
+                  <div className="summary-item">
+                    <span className="summary-label">Selected experiments:</span>
+                    <span className="summary-value">
+                      {selectedExperiments.size}
+                    </span>
+                  </div>
+                  <div className="summary-item">
+                    <span className="summary-label">
+                      Data points (selected):
+                    </span>
+                    <span className="summary-value">{filteredData.length}</span>
+                  </div>
+                  <div className="summary-item">
+                    <span className="summary-label">Unique metrics:</span>
+                    <span className="summary-value">
+                      {
+                        Array.from(
+                          new Set(filteredData.map((d) => d.metric_name))
+                        ).length
+                      }
+                    </span>
+                  </div>
+                </div>
+
+                <div className="data-table">
+                  <h3>Sample Data (Selected Experiments)</h3>
+                  {filteredData.length > 0 ? (
+                    <>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Experiment ID</th>
+                            <th>Metric</th>
+                            <th>Step</th>
+                            <th>Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filteredData.slice(0, 10).map((row, index) => (
+                            <tr key={index}>
+                              <td>{row.experiment_id}</td>
+                              <td>{row.metric_name}</td>
+                              <td>{row.step}</td>
+                              <td>{row.value.toFixed(4)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {filteredData.length > 10 && (
+                        <p className="table-note">
+                          Showing first 10 rows of {filteredData.length} total
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <div className="no-data">
+                      <p>
+                        No experiments selected. Choose experiments from the
+                        left panel.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}
