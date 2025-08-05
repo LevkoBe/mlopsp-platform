@@ -9,9 +9,17 @@
   padding: 2rem;
   background-color: var(--secondary-bg);
   border-radius: var(--border-radius);
-  border: 2px dashed var(--primary-fg);
+  border: 2px dashed var(--secondary-fg);
   gap: 1rem;
 }
+.dragging {
+  border-color: var(--primary-fg);
+}
+.error {
+  border-color: var(--error);
+  background-color: #c200001a;
+}
+
 .input {
   display: none;
 }
@@ -40,7 +48,6 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  background-color: var(--secondary-bg);
   color: var(--secondary-fg);
   font-style: italic;
 }
