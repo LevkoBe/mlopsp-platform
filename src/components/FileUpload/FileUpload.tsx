@@ -1,7 +1,7 @@
 import Papa from "papaparse";
 import { ExperimentData } from "../../types";
 import styles from "./FileUpload.module.css";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 interface FileUploadProps {
   onDataLoaded: (data: ExperimentData[]) => void;
@@ -13,78 +13,87 @@ const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, onFileSet }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [errorOccurred, setErrorOccurred] = useState(false);
 
-  const handleFileUpload = (file: File) => {
-    setIsLoading(true);
-    if (!file) return;
+  const handleFileUpload = useCallback(
+    (file: File) => {
+      setIsLoading(true);
+      if (!file) return;
 
-    onFileSet(file.name);
+      onFileSet(file.name);
 
-    Papa.parse<ExperimentData>(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (result) => {
-        setIsLoading(false);
-        const data = result.data as ExperimentData[];
+      Papa.parse<ExperimentData>(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          setIsLoading(false);
+          const data = result.data as ExperimentData[];
 
-        const validData = data
-          .filter(
-            (row) =>
-              row.experiment_id &&
-              row.metric_name &&
-              !isNaN(Number(row.step)) &&
-              !isNaN(Number(row.value))
-          )
-          .map((row) => ({
-            experiment_id: row.experiment_id.trim(),
-            metric_name: row.metric_name.trim(),
-            step: Number(row.step),
-            value: Number(row.value),
-          }));
+          const validData = data
+            .filter(
+              (row) =>
+                row.experiment_id &&
+                row.metric_name &&
+                !isNaN(Number(row.step)) &&
+                !isNaN(Number(row.value))
+            )
+            .map((row) => ({
+              experiment_id: row.experiment_id.trim(),
+              metric_name: row.metric_name.trim(),
+              step: Number(row.step),
+              value: Number(row.value),
+            }));
 
-        if (validData.length === 0) {
+          if (validData.length === 0) {
+            setErrorOccurred(true);
+            return;
+          }
+
+          onDataLoaded(validData);
+          setErrorOccurred(false);
+        },
+        error: (error) => {
           setErrorOccurred(true);
-          return;
-        }
+          console.error("CSV parsing error:", error);
+          setIsLoading(false);
+        },
+        transform: (value: string, header: string) => {
+          if (header === "step") return parseInt(value) || 0;
+          if (header === "value") return parseFloat(value) || 0;
+          return value.trim();
+        },
+      });
+    },
+    [onDataLoaded, onFileSet]
+  );
 
-        onDataLoaded(validData);
-        setErrorOccurred(false);
-      },
-      error: (error) => {
-        setErrorOccurred(true);
-        console.error("CSV parsing error:", error);
-        setIsLoading(false);
-      },
-      transform: (value: string, header: string) => {
-        if (header === "step") return parseInt(value) || 0;
-        if (header === "value") return parseFloat(value) || 0;
-        return value.trim();
-      },
-    });
-  };
+  const handleFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) handleFileUpload(file);
+      else setErrorOccurred(true);
+    },
+    [handleFileUpload]
+  );
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) handleFileUpload(file);
-    else setErrorOccurred(true);
-  };
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      const file = Array.from(e.dataTransfer.files).find(
+        (f) => f.type === "text/csv" || f.name.endsWith(".csv")
+      );
+      if (file) handleFileUpload(file);
+      setIsDragging(false);
+    },
+    [handleFileUpload]
+  );
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const file = Array.from(e.dataTransfer.files).find(
-      (f) => f.type === "text/csv" || f.name.endsWith(".csv")
-    );
-    if (file) handleFileUpload(file);
-    setIsDragging(false);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
     const file = Array.from(e.dataTransfer.items).find(
       (f) => f.type === "text/csv" && f.kind === "file"
     );
     setErrorOccurred(!file);
     setIsDragging(true);
-  };
+  }, []);
 
   return (
     <div
