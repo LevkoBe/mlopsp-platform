@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
-import Papa from "papaparse";
 import "./App.css";
 import { ExperimentData } from "./types";
+import FileUpload from "./components/FileUpload/FileUpload";
 
 const App: React.FC = () => {
   const [data, setData] = useState<ExperimentData[]>([]);
@@ -14,37 +14,6 @@ const App: React.FC = () => {
     const experimentIds = Array.from(new Set(data.map((d) => d.experiment_id)));
     return experimentIds.sort();
   }, [data]);
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setFileName(file.name);
-
-      Papa.parse<ExperimentData>(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (result) => {
-          const parsedData = result.data.map((row) => ({
-            experiment_id: row.experiment_id,
-            metric_name: row.metric_name,
-            step: Number(row.step),
-            value: Number(row.value),
-          }));
-          setData(parsedData);
-
-          const firstExperiment = Array.from(
-            new Set(parsedData.map((d) => d.experiment_id))
-          )[0];
-          if (firstExperiment) {
-            setSelectedExperiments(new Set([firstExperiment]));
-          }
-        },
-        error: (error) => {
-          console.error("CSV parsing error:", error);
-        },
-      });
-    }
-  };
 
   const resetData = () => {
     setData([]);
@@ -85,25 +54,11 @@ const App: React.FC = () => {
 
       <main className="app-main">
         {data.length === 0 ? (
-          <div className="upload-section">
-            <div className="upload-area">
-              <h2>Upload Your Data</h2>
-              <p>Select a CSV file with your experiment data</p>
-              <label className="file-input-label">
-                <span className="file-button">Upload CSV</span>
-                <input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleFileUpload}
-                  className="file-input"
-                />
-              </label>
-              <div className="format-info">
-                <h4>Expected format:</h4>
-                <code>experiment_id, metric_name, step, value</code>
-              </div>
-            </div>
-          </div>
+          <FileUpload
+            onDataLoaded={setData}
+            onFileSet={setFileName}
+            onExperimentsSelected={setSelectedExperiments}
+          />
         ) : (
           <div className="data-section">
             <div className="data-header">

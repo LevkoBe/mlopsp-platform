@@ -42,58 +42,6 @@
   padding: 2rem;
 }
 
-.upload-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.upload-area {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding: 2rem;
-  background-color: var(--secondary-bg);
-  border-radius: var(--border-radius);
-  border: 2px dashed var(--primary-fg);
-  gap: 1rem;
-}
-
-.file-input {
-  display: none;
-}
-
-.file-input-label {
-  display: inline-block;
-  cursor: pointer;
-  background-color: var(--primary-fg);
-  color: var(--primary-bg);
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-.file-input-label:hover {
-  background-color: #d6d6d6;
-}
-
-.file-button {
-  pointer-events: none;
-}
-
-.format-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: var(--secondary-bg);
-  color: var(--secondary-fg);
-  font-style: italic;
-}
-
 .data-section {
   width: 95%;
   max-width: 1200px;
