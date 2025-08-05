@@ -7,7 +7,7 @@ interface ExperimentSelectorProps {
   selectExperiments: (experimentIds: Set<string>) => void;
 }
 
-export const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
+const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
   allExperiments,
   selectedExperiments,
   toggleExperiment,
@@ -52,3 +52,5 @@ export const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
     </div>
   );
 };
+
+export default ExperimentSelector;

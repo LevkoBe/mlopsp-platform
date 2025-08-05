@@ -2,8 +2,9 @@ import React, { useState, useMemo } from "react";
 import styles from "./App.module.css";
 import { ExperimentData } from "./types";
 import FileUpload from "./components/FileUpload/FileUpload";
-import { ExperimentSelector } from "./components/ExperimentSelector/ExperimentSelector";
+import ExperimentSelector from "./components/ExperimentSelector/ExperimentSelector";
 import DataVisualization from "./components/DataVisualization/DataVisualization";
+import ExperimentsSummary from "./components/ExperimentsSummary/ExperimentsSummary";
 
 const App: React.FC = () => {
   const [data, setData] = useState<ExperimentData[]>([]);
@@ -71,34 +72,11 @@ const App: React.FC = () => {
               />
 
               <div className="main-content">
-                <div className="data-summary">
-                  <div className="summary-item">
-                    <span className="summary-label">Total experiments:</span>
-                    <span className="summary-value">{experiments.length}</span>
-                  </div>
-                  <div className="summary-item">
-                    <span className="summary-label">Selected experiments:</span>
-                    <span className="summary-value">
-                      {selectedExperiments.size}
-                    </span>
-                  </div>
-                  <div className="summary-item">
-                    <span className="summary-label">
-                      Data points (selected):
-                    </span>
-                    <span className="summary-value">{filteredData.length}</span>
-                  </div>
-                  <div className="summary-item">
-                    <span className="summary-label">Unique metrics:</span>
-                    <span className="summary-value">
-                      {
-                        Array.from(
-                          new Set(filteredData.map((d) => d.metric_name))
-                        ).length
-                      }
-                    </span>
-                  </div>
-                </div>
+                <ExperimentsSummary
+                  all={experiments}
+                  selected={selectedExperiments}
+                  filtered={filteredData}
+                />
 
                 <DataVisualization filteredData={filteredData} />
               </div>
