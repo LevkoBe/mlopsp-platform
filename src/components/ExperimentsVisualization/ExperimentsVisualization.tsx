@@ -34,7 +34,7 @@ const ExperimentsVisualization: React.FC<ExperimentsVisualizationProps> = ({
             </tbody>
           </table>
           {filtered.length > 10 && (
-            <p className={styles.note}>
+            <p className={styles.notice}>
               Showing first 10 rows of {filtered.length} total
             </p>
           )}

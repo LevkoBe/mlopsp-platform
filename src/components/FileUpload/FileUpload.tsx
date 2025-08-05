@@ -5,14 +5,9 @@ import styles from "./FileUpload.module.css";
 interface FileUploadProps {
   onDataLoaded: (data: ExperimentData[]) => void;
   onFileSet: (fileName: string) => void;
-  onExperimentsSelected: (experiments: Set<string>) => void;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({
-  onDataLoaded,
-  onFileSet,
-  onExperimentsSelected,
-}) => {
+const FileUpload: React.FC<FileUploadProps> = ({ onDataLoaded, onFileSet }) => {
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -29,13 +24,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
             value: Number(row.value),
           }));
           onDataLoaded(parsedData);
-
-          const firstExperiment = Array.from(
-            new Set(parsedData.map((d) => d.experiment_id))
-          )[0];
-          if (firstExperiment) {
-            onExperimentsSelected(new Set([firstExperiment]));
-          }
         },
         error: (error) => {
           console.error("CSV parsing error:", error);

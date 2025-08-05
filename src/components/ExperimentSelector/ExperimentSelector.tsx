@@ -1,31 +1,31 @@
 import styles from "./ExperimentSelector.module.css";
 
 interface ExperimentSelectorProps {
-  allExperiments: string[];
-  selectedExperiments: Set<string>;
-  toggleExperiment: (experimentId: string) => void;
-  selectExperiments: (experimentIds: Set<string>) => void;
+  all: string[];
+  selected: Set<string>;
+  toggle: (experimentId: string) => void;
+  select: (experimentIds: Set<string>) => void;
 }
 
 const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
-  allExperiments,
-  selectedExperiments,
-  toggleExperiment,
-  selectExperiments,
+  all,
+  selected,
+  toggle,
+  select,
 }) => {
   return (
     <div className={styles.panel}>
       <div className={styles.header}>
-        <h3>Experiments ({selectedExperiments.size} selected)</h3>
+        <h3>Experiments ({selected.size} selected)</h3>
         <div className={styles.controls}>
           <button
-            onClick={() => selectExperiments(new Set(allExperiments))}
+            onClick={() => select(new Set(all))}
             className={`${styles.btn} ${styles.selectAll}`}
           >
             All
           </button>
           <button
-            onClick={() => selectExperiments(new Set())}
+            onClick={() => select(new Set())}
             className={`${styles.btn} ${styles.clearAll}`}
           >
             None
@@ -34,17 +34,17 @@ const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
       </div>
 
       <div className={styles.list}>
-        {allExperiments.map((experimentId) => (
+        {all.map((experimentId) => (
           <div
             key={experimentId}
             className={`${styles.item} ${
-              selectedExperiments.has(experimentId) ? styles.selected : ""
+              selected.has(experimentId) ? styles.selected : ""
             }`}
-            onClick={() => toggleExperiment(experimentId)}
+            onClick={() => toggle(experimentId)}
           >
             <span className={styles.name}>{experimentId}</span>
             <span className={styles.indicator}>
-              {selectedExperiments.has(experimentId) ? "✓" : "○"}
+              {selected.has(experimentId) ? "✓" : "○"}
             </span>
           </div>
         ))}
