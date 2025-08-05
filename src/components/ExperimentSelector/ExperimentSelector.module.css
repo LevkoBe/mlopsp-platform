@@ -1,27 +1,22 @@
-.experiment-panel {
+.panel {
   background-color: var(--accent-bg);
   border-radius: var(--border-radius);
   padding: 1.5rem;
 }
 
-.panel-header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
 }
 
-.panel-header h3 {
-  font-size: 1rem;
-  margin: 0;
-}
-
-.panel-controls {
+.controls {
   display: flex;
   gap: 0.5rem;
 }
 
-.control-btn {
+.btn {
   padding: 0.25rem 0.5rem;
   border: none;
   border-radius: 4px;
@@ -31,25 +26,25 @@
   transition: background-color 0.3s;
 }
 
-.select-all {
+.selectAll {
   background-color: var(--secondary-fg);
   color: var(--primary-bg);
 }
 
-.select-all:hover {
+.selectAll:hover {
   background-color: #85c2b5;
 }
 
-.clear-all {
+.clearAll {
   background-color: var(--primary-bg);
   color: var(--primary-fg);
 }
 
-.clear-all:hover {
+.clearAll:hover {
   background-color: #2a3432;
 }
 
-.experiment-list {
+.list {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -57,7 +52,7 @@
   overflow-y: auto;
 }
 
-.experiment-item {
+.item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -69,20 +64,20 @@
   border: 2px solid transparent;
 }
 
-.experiment-item:hover {
+.item:hover {
   background-color: var(--primary-bg);
 }
 
-.experiment-item.selected {
+.item.selected {
   background-color: var(--selected-bg);
   border-color: var(--secondary-fg);
 }
 
-.experiment-name {
+.name {
   font-weight: 500;
 }
 
-.experiment-indicator {
+.indicator {
   font-size: 1.2rem;
   color: var(--secondary-fg);
 }

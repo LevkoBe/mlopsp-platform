@@ -1,15 +1,9 @@
-.upload-section {
+.uploadArea {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
-}
-
-.upload-area {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
   padding: 2rem;
   background-color: var(--secondary-bg);
   border-radius: var(--border-radius);
@@ -17,11 +11,11 @@
   gap: 1rem;
 }
 
-.file-input {
+.input {
   display: none;
 }
 
-.file-input-label {
+.label {
   display: inline-block;
   cursor: pointer;
   background-color: var(--primary-fg);
@@ -32,15 +26,15 @@
   transition: background-color 0.3s;
 }
 
-.file-input-label:hover {
+.label:hover {
   background-color: #d6d6d6;
 }
 
-.file-button {
+.button {
   pointer-events: none;
 }
 
-.format-info {
+.notice {
   display: flex;
   flex-direction: column;
   align-items: center;

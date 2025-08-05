@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import "./App.css";
+import styles from "./App.module.css";
 import { ExperimentData } from "./types";
 import FileUpload from "./components/FileUpload/FileUpload";
 import { ExperimentSelector } from "./components/ExperimentSelector/ExperimentSelector";
@@ -39,13 +39,13 @@ const App: React.FC = () => {
   }, [data, selectedExperiments]);
 
   return (
-    <div className="app">
-      <header className="app-header">
+    <div className={styles.app}>
+      <header className={styles.header}>
         <h1>MLOps Experiment Tracker</h1>
         <p>A simple tool for tracking ML experiments</p>
       </header>
 
-      <main className="app-main">
+      <main className={styles.main}>
         {data.length === 0 ? (
           <FileUpload
             onDataLoaded={setData}

@@ -1,4 +1,4 @@
-import "./ExperimentSelector.css";
+import styles from "./ExperimentSelector.module.css";
 
 interface ExperimentSelectorProps {
   allExperiments: string[];
@@ -14,36 +14,36 @@ export const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
   selectExperiments,
 }) => {
   return (
-    <div className="experiment-panel">
-      <div className="panel-header">
+    <div className={styles.panel}>
+      <div className={styles.header}>
         <h3>Experiments ({selectedExperiments.size} selected)</h3>
-        <div className="panel-controls">
+        <div className={styles.controls}>
           <button
             onClick={() => selectExperiments(new Set(allExperiments))}
-            className="control-btn select-all"
+            className={`${styles.btn} ${styles.selectAll}`}
           >
             All
           </button>
           <button
             onClick={() => selectExperiments(new Set())}
-            className="control-btn clear-all"
+            className={`${styles.btn} ${styles.clearAll}`}
           >
             None
           </button>
         </div>
       </div>
 
-      <div className="experiment-list">
+      <div className={styles.list}>
         {allExperiments.map((experimentId) => (
           <div
             key={experimentId}
-            className={`experiment-item ${
-              selectedExperiments.has(experimentId) ? "selected" : ""
+            className={`${styles.item} ${
+              selectedExperiments.has(experimentId) ? styles.selected : ""
             }`}
             onClick={() => toggleExperiment(experimentId)}
           >
-            <span className="experiment-name">{experimentId}</span>
-            <span className="experiment-indicator">
+            <span className={styles.name}>{experimentId}</span>
+            <span className={styles.indicator}>
               {selectedExperiments.has(experimentId) ? "✓" : "○"}
             </span>
           </div>

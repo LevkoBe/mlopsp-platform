@@ -1,6 +1,6 @@
 import Papa from "papaparse";
 import { ExperimentData } from "../../types";
-import "./FileUpload.css";
+import styles from "./FileUpload.module.css";
 
 interface FileUploadProps {
   onDataLoaded: (data: ExperimentData[]) => void;
@@ -45,23 +45,21 @@ const FileUpload: React.FC<FileUploadProps> = ({
   };
 
   return (
-    <div className="upload-section">
-      <div className="upload-area">
-        <h2>Upload Your Data</h2>
-        <p>Select a CSV file with your experiment data</p>
-        <label className="file-input-label">
-          <span className="file-button">Upload CSV</span>
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleFileUpload}
-            className="file-input"
-          />
-        </label>
-        <div className="format-info">
-          <h4>Expected format:</h4>
-          <code>experiment_id, metric_name, step, value</code>
-        </div>
+    <div className={styles.uploadArea}>
+      <h2>Upload Your Data</h2>
+      <p>Select a CSV file with your experiment data</p>
+      <label className={styles.label}>
+        <span className={styles.button}>Upload CSV</span>
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFileUpload}
+          className={styles.input}
+        />
+      </label>
+      <div className={styles.notice}>
+        <h4>Expected format:</h4>
+        <code>experiment_id, metric_name, step, value</code>
       </div>
     </div>
   );
