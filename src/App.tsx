@@ -3,7 +3,7 @@ import styles from "./App.module.css";
 import { ExperimentData } from "./types";
 import FileUpload from "./components/FileUpload/FileUpload";
 import ExperimentSelector from "./components/ExperimentSelector/ExperimentSelector";
-import DataVisualization from "./components/DataVisualization/DataVisualization";
+import ExperimentsVisualization from "./components/ExperimentsVisualization/ExperimentsVisualization";
 import ExperimentsSummary from "./components/ExperimentsSummary/ExperimentsSummary";
 
 const App: React.FC = () => {
@@ -78,7 +78,7 @@ const App: React.FC = () => {
                   filtered={filteredData}
                 />
 
-                <DataVisualization filteredData={filteredData} />
+                <ExperimentsVisualization filtered={filteredData} />
               </div>
             </div>
           </div>

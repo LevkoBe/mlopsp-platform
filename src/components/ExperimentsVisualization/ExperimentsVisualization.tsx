@@ -1,17 +1,17 @@
 import { ExperimentData } from "../../types";
-import styles from "./DataVisualization.module.css";
+import styles from "./ExperimentsVisualization.module.css";
 
-interface DataVisualizationProps {
-  filteredData: ExperimentData[];
+interface ExperimentsVisualizationProps {
+  filtered: ExperimentData[];
 }
 
-const DataVisualization: React.FC<DataVisualizationProps> = ({
-  filteredData,
+const ExperimentsVisualization: React.FC<ExperimentsVisualizationProps> = ({
+  filtered,
 }) => {
   return (
     <div className={styles.container}>
       <h3>Sample Data (Selected Experiments)</h3>
-      {filteredData.length > 0 ? (
+      {filtered.length > 0 ? (
         <>
           <table>
             <thead>
@@ -23,7 +23,7 @@ const DataVisualization: React.FC<DataVisualizationProps> = ({
               </tr>
             </thead>
             <tbody>
-              {filteredData.slice(0, 10).map((row, index) => (
+              {filtered.slice(0, 10).map((row, index) => (
                 <tr key={index}>
                   <td>{row.experiment_id}</td>
                   <td>{row.metric_name}</td>
@@ -33,9 +33,9 @@ const DataVisualization: React.FC<DataVisualizationProps> = ({
               ))}
             </tbody>
           </table>
-          {filteredData.length > 10 && (
+          {filtered.length > 10 && (
             <p className={styles.note}>
-              Showing first 10 rows of {filteredData.length} total
+              Showing first 10 rows of {filtered.length} total
             </p>
           )}
         </>
@@ -50,4 +50,4 @@ const DataVisualization: React.FC<DataVisualizationProps> = ({
   );
 };
 
-export default DataVisualization;
+export default ExperimentsVisualization;
