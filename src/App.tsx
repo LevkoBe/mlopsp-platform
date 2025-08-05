@@ -3,6 +3,7 @@ import styles from "./App.module.css";
 import { ExperimentData } from "./types";
 import FileUpload from "./components/FileUpload/FileUpload";
 import { ExperimentSelector } from "./components/ExperimentSelector/ExperimentSelector";
+import DataVisualization from "./components/DataVisualization/DataVisualization";
 
 const App: React.FC = () => {
   const [data, setData] = useState<ExperimentData[]>([]);
@@ -99,45 +100,7 @@ const App: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="data-table">
-                  <h3>Sample Data (Selected Experiments)</h3>
-                  {filteredData.length > 0 ? (
-                    <>
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Experiment ID</th>
-                            <th>Metric</th>
-                            <th>Step</th>
-                            <th>Value</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filteredData.slice(0, 10).map((row, index) => (
-                            <tr key={index}>
-                              <td>{row.experiment_id}</td>
-                              <td>{row.metric_name}</td>
-                              <td>{row.step}</td>
-                              <td>{row.value.toFixed(4)}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                      {filteredData.length > 10 && (
-                        <p className="table-note">
-                          Showing first 10 rows of {filteredData.length} total
-                        </p>
-                      )}
-                    </>
-                  ) : (
-                    <div className="no-data">
-                      <p>
-                        No experiments selected. Choose experiments from the
-                        left panel.
-                      </p>
-                    </div>
-                  )}
-                </div>
+                <DataVisualization filteredData={filteredData} />
               </div>
             </div>
           </div>
