@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import "./App.css";
 import { ExperimentData } from "./types";
 import FileUpload from "./components/FileUpload/FileUpload";
+import { ExperimentSelector } from "./components/ExperimentSelector/ExperimentSelector";
 
 const App: React.FC = () => {
   const [data, setData] = useState<ExperimentData[]>([]);
@@ -33,14 +34,6 @@ const App: React.FC = () => {
     });
   };
 
-  const selectAllExperiments = () => {
-    setSelectedExperiments(new Set(experiments));
-  };
-
-  const clearAllExperiments = () => {
-    setSelectedExperiments(new Set());
-  };
-
   const filteredData = useMemo(() => {
     return data.filter((row) => selectedExperiments.has(row.experiment_id));
   }, [data, selectedExperiments]);
@@ -69,42 +62,12 @@ const App: React.FC = () => {
             </div>
 
             <div className="content-grid">
-              <div className="experiment-panel">
-                <div className="panel-header">
-                  <h3>Experiments ({selectedExperiments.size} selected)</h3>
-                  <div className="panel-controls">
-                    <button
-                      onClick={selectAllExperiments}
-                      className="control-btn select-all"
-                    >
-                      All
-                    </button>
-                    <button
-                      onClick={clearAllExperiments}
-                      className="control-btn clear-all"
-                    >
-                      None
-                    </button>
-                  </div>
-                </div>
-
-                <div className="experiment-list">
-                  {experiments.map((experimentId) => (
-                    <div
-                      key={experimentId}
-                      className={`experiment-item ${
-                        selectedExperiments.has(experimentId) ? "selected" : ""
-                      }`}
-                      onClick={() => toggleExperiment(experimentId)}
-                    >
-                      <span className="experiment-name">{experimentId}</span>
-                      <span className="experiment-indicator">
-                        {selectedExperiments.has(experimentId) ? "✓" : "○"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <ExperimentSelector
+                allExperiments={experiments}
+                selectedExperiments={selectedExperiments}
+                toggleExperiment={toggleExperiment}
+                selectExperiments={setSelectedExperiments}
+              />
 
               <div className="main-content">
                 <div className="data-summary">
