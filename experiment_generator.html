@@ -15,6 +15,7 @@
 
     <script>
       const pad = (n) => n.toString().padStart(2, "0");
+      const rand = (n) => Math.ceil(Math.random() * n);
       const generate = () => {
         const experiments = +expCount.value,
           steps = +stepCount.value,
@@ -23,7 +24,7 @@
         for (let e = 1; e <= experiments; e++)
           for (let m = 1; m <= metrics; m++) {
             let value = Math.random();
-            for (let s = 1; s <= steps; s++) {
+            for (let s = 1; s <= rand(steps); s++) {
               value += Math.random() > 0.5 ? 0.05 : -0.05;
               value = Math.max(0, Math.min(1, value));
               csv += `exp_${pad(e)},metric_${pad(m)},${s},${value.toFixed(
