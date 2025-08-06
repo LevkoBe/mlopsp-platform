@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./App.module.css";
 import { ExperimentData } from "./types";
 import FileUpload from "./components/FileUpload/FileUpload";
-import ExperimentInspector from "./components/ExperimentInspector/ExperimentInspector/ExperimentInspector";
+import ExperimentInspector from "./components/ExperimentInspector/ExperimentInspector";
 
 const App: React.FC = () => {
   const [experiments, setData] = useState<ExperimentData[]>([]);

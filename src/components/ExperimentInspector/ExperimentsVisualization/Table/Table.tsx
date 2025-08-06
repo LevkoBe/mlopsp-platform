@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Table.module.css";
-import { ExperimentData } from "../../../types";
+import { ExperimentData } from "../../../../types";
 
 interface TableProps {
   experiments: ExperimentData[];

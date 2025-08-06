@@ -1,5 +1,5 @@
+import { ExperimentData } from "../../../types";
 import styles from "./ExperimentsSummary.module.css";
-import { ExperimentData } from "../../types";
 
 interface ExperimentsSummaryProps {
   all: string[];

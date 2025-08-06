@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
-import { ExperimentData } from "../../types";
 import styles from "./ExperimentsVisualization.module.css";
 import Charts from "./Charts/Charts";
 import Table from "./Table/Table";
+import { ExperimentData } from "../../../types";
 
 interface ExperimentsVisualizationProps {
   filtered: ExperimentData[];

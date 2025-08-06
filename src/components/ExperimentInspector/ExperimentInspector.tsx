@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
-import ExperimentSelector from "../../ExperimentSelector/ExperimentSelector";
-import ExperimentsSummary from "../../ExperimentsSummary/ExperimentsSummary";
-import ExperimentsVisualization from "../../ExperimentsVisualization/ExperimentsVisualization";
 import styles from "./ExperimentInspector.module.css";
-import { ExperimentData } from "../../../types";
+import { ExperimentData } from "../../types";
+import ExperimentSelector from "./ExperimentSelector/ExperimentSelector";
+import ExperimentsSummary from "./ExperimentsSummary/ExperimentsSummary";
+import ExperimentsVisualization from "./ExperimentsVisualization/ExperimentsVisualization";
 
 interface ExperimentInspectorProps {
   fileName: string;
