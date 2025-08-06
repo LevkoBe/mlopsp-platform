@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/mlopsp-platform/static/css/main.a78a686e.css",
+    "main.css": "/mlopsp-platform/static/css/main.a34bec49.css",
     "main.js": "/mlopsp-platform/static/js/main.11583c19.js",
     "index.html": "/mlopsp-platform/index.html",
-    "main.a78a686e.css.map": "/mlopsp-platform/static/css/main.a78a686e.css.map",
+    "main.a34bec49.css.map": "/mlopsp-platform/static/css/main.a34bec49.css.map",
     "main.11583c19.js.map": "/mlopsp-platform/static/js/main.11583c19.js.map"
   },
   "entrypoints": [
-    "static/css/main.a78a686e.css",
+    "static/css/main.a34bec49.css",
     "static/js/main.11583c19.js"
   ]
 }
