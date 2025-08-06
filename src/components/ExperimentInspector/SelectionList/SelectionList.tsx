@@ -1,13 +1,15 @@
-import styles from "./ExperimentSelector.module.css";
+import styles from "./SelectionList.module.css";
 
-interface ExperimentSelectorProps {
+interface SelectionListProps {
+  title: string;
   all: string[];
   selected: Set<string>;
-  toggle: (experimentId: string) => void;
-  select: (experimentIds: Set<string>) => void;
+  toggle: (item: string) => void;
+  select: (items: Set<string>) => void;
 }
 
-const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
+const SelectionList: React.FC<SelectionListProps> = ({
+  title,
   all,
   selected,
   toggle,
@@ -16,7 +18,9 @@ const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
   return (
     <div className={styles.panel}>
       <div className={styles.header}>
-        <h3>Experiments ({selected.size} selected)</h3>
+        <h3>
+          {title} ({selected.size} selected)
+        </h3>
         <div className={styles.controls}>
           <button
             onClick={() => select(new Set(all))}
@@ -34,17 +38,17 @@ const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
       </div>
 
       <div className={styles.list}>
-        {all.map((experimentId) => (
+        {all.map((item) => (
           <div
-            key={experimentId}
+            key={item}
             className={`${styles.item} ${
-              selected.has(experimentId) ? styles.selected : ""
+              selected.has(item) ? styles.selected : ""
             }`}
-            onClick={() => toggle(experimentId)}
+            onClick={() => toggle(item)}
           >
-            <span className={styles.name}>{experimentId}</span>
+            <span className={styles.name}>{item}</span>
             <span className={styles.indicator}>
-              {selected.has(experimentId) ? "✓" : "○"}
+              {selected.has(item) ? "✓" : "○"}
             </span>
           </div>
         ))}
@@ -53,4 +57,4 @@ const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
   );
 };
 
-export default ExperimentSelector;
+export default SelectionList;

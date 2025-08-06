@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import styles from "./ExperimentInspector.module.css";
 import { ExperimentData } from "../../types";
-import ExperimentSelector from "./ExperimentSelector/ExperimentSelector";
+import ExperimentSelector from "./SelectionList/ExperimentSelector";
+import MetricFilter from "./SelectionList/MetricFilter";
 import ExperimentsSummary from "./ExperimentsSummary/ExperimentsSummary";
 import ExperimentsVisualization from "./ExperimentsVisualization/ExperimentsVisualization";
 
@@ -21,6 +22,11 @@ const ExperimentInspector: React.FC<ExperimentInspectorProps> = ({
       experiments.length > 0 ? experiments.map((e) => e.experiment_id) : []
     )
   );
+
+  const [selectedMetrics, setSelectedMetrics] = useState<Set<string>>(
+    new Set(experiments.length > 0 ? experiments.map((e) => e.metric_name) : [])
+  );
+
   const allExperiments = useMemo(() => {
     const experimentIds = Array.from(
       new Set(experiments.map((d) => d.experiment_id))
@@ -28,11 +34,20 @@ const ExperimentInspector: React.FC<ExperimentInspectorProps> = ({
     return experimentIds.sort();
   }, [experiments]);
 
-  const filteredExperiments = useMemo(() => {
-    return experiments.filter((row) =>
-      selectedExperiments.has(row.experiment_id)
+  const allMetrics = useMemo(() => {
+    const metricNames = Array.from(
+      new Set(experiments.map((d) => d.metric_name))
     );
-  }, [experiments, selectedExperiments]);
+    return metricNames.sort();
+  }, [experiments]);
+
+  const filteredExperiments = useMemo(() => {
+    return experiments.filter(
+      (row) =>
+        selectedExperiments.has(row.experiment_id) &&
+        selectedMetrics.has(row.metric_name)
+    );
+  }, [experiments, selectedExperiments, selectedMetrics]);
 
   const toggleExperiment = (experimentId: string) => {
     setSelectedExperiments((prev) => {
@@ -41,6 +56,18 @@ const ExperimentInspector: React.FC<ExperimentInspectorProps> = ({
         newSet.delete(experimentId);
       } else {
         newSet.add(experimentId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleMetric = (metricName: string) => {
+    setSelectedMetrics((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(metricName)) {
+        newSet.delete(metricName);
+      } else {
+        newSet.add(metricName);
       }
       return newSet;
     });
@@ -62,6 +89,13 @@ const ExperimentInspector: React.FC<ExperimentInspectorProps> = ({
             selected={selectedExperiments}
             toggle={toggleExperiment}
             select={setSelectedExperiments}
+          />
+
+          <MetricFilter
+            all={allMetrics}
+            selected={selectedMetrics}
+            toggle={toggleMetric}
+            select={setSelectedMetrics}
           />
         </div>
 

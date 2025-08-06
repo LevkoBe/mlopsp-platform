@@ -16,8 +16,8 @@
   border-color: var(--primary-fg);
 }
 .error {
-  border-color: var(--error);
-  background-color: #c200001a;
+  border-color: var(--error-fg);
+  background-color: var(--error-bg);
 }
 
 .input {

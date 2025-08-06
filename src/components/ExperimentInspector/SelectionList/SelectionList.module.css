@@ -1,0 +1,130 @@
+.panel {
+  background-color: var(--secondary-bg);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--accent-bg);
+}
+
+.header h3 {
+  color: var(--primary-fg);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--accent-bg);
+  border-radius: calc(var(--border-radius) * 0.75);
+  background-color: transparent;
+  color: var(--primary-fg);
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  background-color: var(--accent-bg);
+  border-color: var(--secondary-fg);
+}
+
+.selectAll:hover {
+  background-color: var(--secondary-fg);
+  border-color: var(--secondary-fg);
+  color: var(--primary-bg);
+}
+
+.clearAll:hover {
+  background-color: var(--error-bg);
+  border-color: var(--error-fg);
+  color: var(--primary-fg);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.list::-webkit-scrollbar-track {
+  background-color: var(--accent-bg);
+  border-radius: 3px;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: var(--secondary-fg);
+  border-radius: 3px;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--primary-fg);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-radius: calc(var(--border-radius) * 0.75);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  background-color: var(--primary-bg);
+}
+
+.item:hover {
+  background-color: var(--accent-bg);
+  border-color: var(--secondary-fg);
+}
+
+.item.selected {
+  background-color: var(--selected-bg);
+  border-color: var(--secondary-fg);
+  color: var(--primary-fg);
+}
+
+.item.selected:hover {
+  background-color: var(--secondary-fg);
+  color: var(--primary-bg);
+}
+
+.name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.indicator {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--secondary-fg);
+  margin-left: 0.5rem;
+}
+
+.item.selected .indicator {
+  color: inherit;
+}
