@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useCallback } from "react";
 import {
   LineChart,
   Line,
@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import styles from "./Charts.module.css";
+import { toPng, toSvg } from "html-to-image";
 
 interface ChartsProps {
   chartData: Record<string, any[]>;
@@ -33,26 +34,80 @@ const Charts: React.FC<ChartsProps> = ({
   margin = { top: 20, right: 30, left: 20, bottom: 20 },
   generateColor = defaultColorGenerator,
 }) => {
+  const chartRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const downloadChart = useCallback(
+    async (format: "png" | "svg", metric: string) => {
+      const node = chartRefs.current[metric];
+      if (!node) {
+        console.error("Chart element not found for metric:", metric);
+        return;
+      }
+
+      try {
+        const options = {
+          backgroundColor: getComputedStyle(node).backgroundColor,
+        };
+
+        const dataUrl =
+          format === "png"
+            ? await toPng(node, options)
+            : await toSvg(node, options);
+
+        const link = document.createElement("a");
+        link.download = `${metric}-chart.${format}`;
+        link.href = dataUrl;
+        link.click();
+      } catch (err) {
+        console.error("Failed to export chart:", err);
+      }
+    },
+    []
+  );
+
   return (
     <div className={styles.chartsContainer}>
       {metrics.map((metric) => (
-        <div key={metric} className={styles.chartWrapper}>
-          <h4 className={styles.chartTitle}>{metric}</h4>
+        <div
+          key={metric}
+          className={styles.chartWrapper}
+          ref={(el) => (chartRefs.current[metric] = el)}
+        >
+          <div className={styles.chartHeader}>
+            <h4 className={styles.chartTitle}>{metric}</h4>
+            <div className={styles.downloadControls}>
+              <button
+                onClick={() => downloadChart("png", metric)}
+                className={styles.downloadButton}
+              >
+                PNG
+              </button>
+              <button
+                onClick={() => downloadChart("svg", metric)}
+                className={styles.downloadButton}
+              >
+                SVG
+              </button>
+            </div>
+          </div>
           <ResponsiveContainer width="100%" height={chartHeight}>
             <LineChart data={chartData[metric]} margin={margin}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--accent-bg)" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="var(--accent-bg, #394a46)"
+              />
               <XAxis
                 dataKey="step"
-                stroke="var(--secondary-fg)"
+                stroke="var(--secondary-fg, #6ba397)"
                 fontSize={12}
               />
-              <YAxis stroke="var(--secondary-fg)" fontSize={12} />
+              <YAxis stroke="var(--secondary-fg, #6ba397)" fontSize={12} />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "var(--primary-bg)",
-                  border: "1px solid var(--accent-bg)",
-                  borderRadius: "var(--border-radius)",
-                  color: "var(--primary-fg)",
+                  backgroundColor: "var(--primary-bg, #212827)",
+                  border: "1px solid var(--accent-bg, #394a46)",
+                  borderRadius: "var(--border-radius, 8px)",
+                  color: "var(--primary-fg, #ffffff)",
                 }}
               />
               <Legend />

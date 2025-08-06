@@ -11,10 +11,38 @@
   border: 1px solid var(--accent-bg);
 }
 
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
 .chartTitle {
   font-size: 16px;
   font-weight: 500;
-  margin-bottom: 16px;
   color: var(--secondary-fg);
   text-transform: capitalize;
+}
+
+.downloadControls {
+  display: flex;
+  gap: 8px;
+}
+
+.downloadButton {
+  background-color: var(--accent-bg);
+  color: var(--primary-fg);
+  border: 1px solid var(--accent-bg-hover);
+  padding: 4px 12px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.downloadButton:hover {
+  background-color: var(--accent-bg-hover);
+  border-color: var(--accent-bg-active);
 }
