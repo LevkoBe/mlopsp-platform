@@ -31,7 +31,7 @@ const Charts: React.FC<ChartsProps> = ({
   metrics,
   experiments,
   chartHeight = 300,
-  margin = { top: 20, right: 30, left: 20, bottom: 20 },
+  margin = { top: 20, right: 0, left: 0, bottom: 20 },
   generateColor = defaultColorGenerator,
 }) => {
   const chartRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -66,67 +66,86 @@ const Charts: React.FC<ChartsProps> = ({
   );
 
   return (
-    <div className={styles.chartsContainer}>
-      {metrics.map((metric) => (
-        <div
-          key={metric}
-          className={styles.chartWrapper}
-          ref={(el) => (chartRefs.current[metric] = el)}
-        >
-          <div className={styles.chartHeader}>
-            <h4 className={styles.chartTitle}>{metric}</h4>
-            <div className={styles.downloadControls}>
-              <button
-                onClick={() => downloadChart("png", metric)}
-                className={styles.downloadButton}
-              >
-                PNG
-              </button>
-              <button
-                onClick={() => downloadChart("svg", metric)}
-                className={styles.downloadButton}
-              >
-                SVG
-              </button>
+    <div className={styles.container}>
+      {metrics.map((metric) => {
+        const extraHeight = Math.ceil(experiments.length / 5) * 25;
+        const maxAllowedHeight = 600;
+        const dynamicHeight = Math.min(
+          chartHeight + extraHeight,
+          maxAllowedHeight
+        );
+
+        return (
+          <div
+            key={metric}
+            className={styles.wrapper}
+            ref={(el) => (chartRefs.current[metric] = el)}
+          >
+            <div className={styles.header}>
+              <h4 className={styles.title}>{metric}</h4>
+              <div className={styles.downloadControls}>
+                <button
+                  onClick={() => downloadChart("png", metric)}
+                  className={styles.downloadButton}
+                >
+                  PNG
+                </button>
+                <button
+                  onClick={() => downloadChart("svg", metric)}
+                  className={styles.downloadButton}
+                >
+                  SVG
+                </button>
+              </div>
             </div>
-          </div>
-          <ResponsiveContainer width="100%" height={chartHeight}>
-            <LineChart data={chartData[metric]} margin={margin}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="var(--accent-bg, #394a46)"
-              />
-              <XAxis
-                dataKey="step"
-                stroke="var(--secondary-fg, #6ba397)"
-                fontSize={12}
-              />
-              <YAxis stroke="var(--secondary-fg, #6ba397)" fontSize={12} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "var(--primary-bg, #212827)",
-                  border: "1px solid var(--accent-bg, #394a46)",
-                  borderRadius: "var(--border-radius, 8px)",
-                  color: "var(--primary-fg, #ffffff)",
-                }}
-              />
-              <Legend />
-              {experiments.map((experiment, index) => (
-                <Line
-                  key={experiment}
-                  type="monotone"
-                  dataKey={experiment}
-                  stroke={generateColor(index)}
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                  activeDot={{ r: 5 }}
-                  connectNulls={false}
+
+            <ResponsiveContainer width="100%" height={dynamicHeight}>
+              <LineChart data={chartData[metric]} margin={margin}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--accent-bg, #394a46)"
                 />
-              ))}
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      ))}
+                <XAxis
+                  dataKey="step"
+                  stroke="var(--secondary-fg, #6ba397)"
+                  fontSize={12}
+                />
+                <YAxis stroke="var(--secondary-fg, #6ba397)" fontSize={12} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "var(--primary-bg, #212827)",
+                    border: "1px solid var(--accent-bg, #394a46)",
+                    borderRadius: "var(--border-radius, 8px)",
+                    color: "var(--primary-fg, #ffffff)",
+                  }}
+                />
+                <Legend
+                  layout="horizontal"
+                  align="center"
+                  verticalAlign="bottom"
+                  wrapperStyle={{
+                    maxHeight: 80,
+                    overflowY: "auto",
+                    paddingTop: "10px",
+                  }}
+                />
+                {experiments.map((experiment, index) => (
+                  <Line
+                    key={experiment}
+                    type="monotone"
+                    dataKey={experiment}
+                    stroke={generateColor(index)}
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
+                    connectNulls={false}
+                  />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        );
+      })}
     </div>
   );
 };

@@ -1,24 +1,26 @@
-.chartsContainer {
+.container {
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
 
-.chartWrapper {
+.wrapper {
   background: var(--primary-bg);
   padding: 20px;
   border-radius: var(--border-radius);
   border: 1px solid var(--accent-bg);
 }
 
-.chartHeader {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.chartTitle {
+.title {
   font-size: 16px;
   font-weight: 500;
   color: var(--secondary-fg);
