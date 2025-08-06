@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.a78a686e.css",
-    "main.js": "/static/js/main.11583c19.js",
-    "index.html": "/index.html",
-    "main.a78a686e.css.map": "/static/css/main.a78a686e.css.map",
-    "main.11583c19.js.map": "/static/js/main.11583c19.js.map"
+    "main.css": "/mlopsp-platform/static/css/main.a78a686e.css",
+    "main.js": "/mlopsp-platform/static/js/main.11583c19.js",
+    "index.html": "/mlopsp-platform/index.html",
+    "main.a78a686e.css.map": "/mlopsp-platform/static/css/main.a78a686e.css.map",
+    "main.11583c19.js.map": "/mlopsp-platform/static/js/main.11583c19.js.map"
   },
   "entrypoints": [
     "static/css/main.a78a686e.css",
